@@ -5,6 +5,7 @@ var debug = require('debug');
 var authRoute = require('./routes/authRoutes');
 var userRoute = require('./routes/userRoutes');
 var categoryRoute = require('./routes/categoryRoutes');
+var productRoute = require('./routes/productRoutes');
 
 var app = express();
 app.use(express.json());
@@ -27,6 +28,7 @@ models.sequelize.sync().then(function () {
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/users', userRoute);
 app.use('/api/v1/categories', categoryRoute);
+app.use('/api/v1/products', productRoute);
 
 function onListening() {
     var addr = server.address();
