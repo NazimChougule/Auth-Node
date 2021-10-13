@@ -60,17 +60,17 @@ exports.getProduct = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const product = await models.products.create({
-      name: req.body.name,
-      createdBy: req.userName.toTitleCase(),
-      price: req.body.price,
-      imageType: req.file.mimetype,
-      imageName: req.file.originalname,
-      imageData: req.file.buffer,
-      categoryId: req.body.category.id,
-      categoryName: req.boduy.category.name,
-      createdBy: req.userName.toTitleCase(),
-    });
+    const product = await models.products.findAll();
+    // const product = await models.products.create({
+    //   name: req.body.name,
+    //   createdBy: req.userName.toTitleCase(),
+    //   price: req.body.price,
+    //   imageType: req.file.mimetype,
+    //   imageName: req.file.originalname,
+    //   imageData: req.file.buffer,
+    //   categoryId: req.body.categoryId,
+    //   categoryName: req.body.categoryName
+    // });
     res.status(201).json({
       status: 'success',
       data: {

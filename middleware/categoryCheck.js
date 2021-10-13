@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator/check');
+const { check, validationResult } = require('express-validator');
 const models = require('../models');
 
 checkDuplicateCategory = async (req, res, next) => {

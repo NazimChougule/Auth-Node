@@ -1,6 +1,6 @@
 const express = require('express');
 const productController = require('../controllers/productController');
-const { authJwt, productCheck } = require('../middleware');
+const { authJwt, productCheck, multerHelper } = require('../middleware');
 
 const router = express.Router();
 
@@ -14,6 +14,7 @@ router
     [
       authJwt.verifyToken,
       authJwt.isModerator,
+      multerHelper.handleFileUpload,
       productCheck.checkDuplicateProduct,
       productCheck.checkCategoryExist,
       productCheck.validation,
