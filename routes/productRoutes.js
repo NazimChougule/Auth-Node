@@ -1,11 +1,11 @@
-const express = require('express');
-const productController = require('../controllers/productController');
-const { authJwt, productCheck, multerHelper } = require('../middleware');
+const express = require("express");
+const productController = require("../controllers/productController");
+const { authJwt, productCheck } = require("../middleware");
 
 const router = express.Router();
 
 router
-  .route('/')
+  .route("/")
   .get(
     [authJwt.verifyToken, authJwt.isModerator],
     productController.getAllProducts
@@ -14,7 +14,6 @@ router
     [
       authJwt.verifyToken,
       authJwt.isModerator,
-      multerHelper.handleFileUpload,
       productCheck.checkDuplicateProduct,
       productCheck.checkCategoryExist,
       productCheck.validation,
@@ -24,7 +23,7 @@ router
   );
 
 router
-  .route('/:id')
+  .route("/:id")
   .get([authJwt.verifyToken, authJwt.isModerator], productController.getProduct)
   .patch(
     [
@@ -37,10 +36,7 @@ router
     productController.updateProduct
   )
   .delete(
-    [
-      authJwt.verifyToken,
-      authJwt.isModerator,
-    ],
+    [authJwt.verifyToken, authJwt.isModerator],
     productController.deleteProduct
   );
 

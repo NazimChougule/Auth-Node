@@ -1,5 +1,5 @@
-const { check, validationResult } = require('express-validator');
-const models = require('../models');
+const { check, validationResult } = require("express-validator");
+const models = require("../models");
 
 checkDuplicateProduct = async (req, res, next) => {
   const product = await models.products.findOne({
@@ -9,7 +9,7 @@ checkDuplicateProduct = async (req, res, next) => {
   });
   if (product) {
     res.status(400).send({
-      message: 'Failed! Product already exists!',
+      message: "Failed! Product already exists!",
     });
     return;
   }
@@ -19,12 +19,12 @@ checkDuplicateProduct = async (req, res, next) => {
 checkCategoryExist = async (req, res, next) => {
   const category = models.categories.findOne({
     where: {
-      id: req.body.category.id,
+      id: req.body.categoryId,
     },
   });
   if (!category) {
     res.status(400).send({
-      message: 'Failed! Category does not exist!',
+      message: "Failed! Category does not exist!",
     });
     return;
   }
@@ -41,9 +41,9 @@ checkProductLength = (req, res, next) => {
 };
 
 validation = [
-  check('name')
+  check("name")
     .isLength({ max: 20 })
-    .withMessage('Product Name must be less than 20 characters'),
+    .withMessage("Product Name must be less than 20 characters"),
 ];
 
 const productCheck = {

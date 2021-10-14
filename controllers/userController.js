@@ -1,21 +1,53 @@
-const models = require('../models');
-const config = require('../config/authConfig');
-const User = models.users;
-const Role = models.roles;
+const models = require("../models");
+const Cart = models.carts;
 
-exports.allAccess = async (req, res) => {
-  const users = 
-  res.status(200).send('Public Content.');
+exports.getUserCart = async (req, res) => {
+  try {
+    const cart = await Cart.findAll({
+      where: {
+        id: req.userId,
+      },
+    });
+    return res.status(200).json({
+      message: "success",
+      data: {
+        cart,
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      status: "fail",
+      message: "Something went wrong",
+    });
+  }
 };
 
-exports.userBoard = (req, res) => {
-  res.status(200).send('User Content.');
+exports.addToUserCart = async (req, res) => {
+  try {
+    const cart = await Cart.create({
+      qty: req.body.quantity,
+      userId: req.userId,
+      productId: req.body.productId,
+    });
+    res.status(201).json({
+      message: "success",
+      data: {
+        cart,
+      },
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      message: "Bad Request",
+      err: err,
+    });
+  }
 };
 
-exports.adminBoard = (req, res) => {
-  res.status(200).send('Admin Content.');
-};
+// exports.updateCart = async (req, res) => {
+//   try {
 
-exports.moderatorBoard = (req, res) => {
-  res.status(200).send('Moderator Content.');
-};
+//   } catch (err) {
+
+//   }
+// };

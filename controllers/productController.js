@@ -1,4 +1,4 @@
-const models = require('../models');
+const models = require("../models");
 
 exports.getAllProducts = async (req, res) => {
   try {
@@ -14,12 +14,12 @@ exports.getAllProducts = async (req, res) => {
       //     { model: models.category, as: 'category', attributes: ['id', 'categoryName'] }
       // ],
       attributes: {
-        exclude: ['categoryId'],
+        exclude: ["categoryId"],
       },
-      order: [['createdAt', 'ASC']],
+      order: [["createdAt", "ASC"]],
     });
     res.status(200).json({
-      status: 'success',
+      status: "success",
       count,
       data: {
         products,
@@ -27,8 +27,8 @@ exports.getAllProducts = async (req, res) => {
     });
   } catch (err) {
     res.status(500).json({
-      status: 'fail',
-      message: 'Something went wrong',
+      status: "fail",
+      message: "Something went wrong",
     });
   }
 };
@@ -41,46 +41,53 @@ exports.getProduct = async (req, res) => {
         id,
       },
       attributes: {
-        exclude: ['categoryId'],
+        exclude: ["categoryId"],
       },
     });
     res.status(200).json({
-      status: 'success',
+      status: "success",
       data: {
         products: product,
       },
     });
   } catch (err) {
     res.status(404).json({
-      status: 'fail',
-      message: 'Not found',
+      status: "fail",
+      message: "Not found",
     });
   }
 };
 
 exports.createProduct = async (req, res) => {
   try {
-    const product = await models.products.findAll();
-    // const product = await models.products.create({
-    //   name: req.body.name,
-    //   createdBy: req.userName.toTitleCase(),
-    //   price: req.body.price,
-    //   imageType: req.file.mimetype,
-    //   imageName: req.file.originalname,
-    //   imageData: req.file.buffer,
-    //   categoryId: req.body.categoryId,
-    //   categoryName: req.body.categoryName
-    // });
-    res.status(201).json({
-      status: 'success',
-      data: {
-        product,
-      },
-    });
+    if (req.body.categoryId) {
+      const product = await models.products.create({
+        name: req.body.name,
+        createdBy: req.userName.toTitleCase(),
+        price: req.body.price,
+        imageUrl: req.body.imageUrl,
+        categoryId: req.body.categoryId,
+        categoryName: req.body.categoryName,
+      });
+      if (product) {
+        await product.setCategories([req.body.categoryId]);
+        res.status(201).json({
+          status: "success",
+          data: {
+            product,
+          },
+        });
+      }
+    } else {
+      return res.status(400).json({
+        status: "failed",
+        message: "Please select category",
+      });
+    }
   } catch (err) {
     res.status(400).json({
-      status: 'fail',
-      message: 'Bad request',
+      status: "fail",
+      message: "Bad request",
       err: err,
     });
   }
@@ -95,13 +102,13 @@ exports.updateProduct = async (req, res) => {
       },
     });
     res.status(200).json({
-      status: 'success',
-      message: 'Product updated successfully',
+      status: "success",
+      message: "Product updated successfully",
     });
   } catch (err) {
     res.status(404).json({
-      status: 'fail',
-      message: 'Not found',
+      status: "fail",
+      message: "Not found",
       err: err,
     });
   }
@@ -116,13 +123,13 @@ exports.deleteProduct = async (req, res) => {
       },
     });
     res.status(200).json({
-      status: 'success',
-      message: 'Product deleted successfully',
+      status: "success",
+      message: "Product deleted successfully",
     });
   } catch (err) {
     res.status(404).json({
-      status: 'fail',
-      message: 'Not found',
+      status: "fail",
+      message: "Not found",
     });
   }
 };

@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const Product = sequelize.define('products', {
+  const Product = sequelize.define("products", {
     name: {
       type: Sequelize.STRING,
       unique: true,
@@ -9,20 +9,14 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.INTEGER,
       allowNull: false,
     },
-    imageType: {
+    imageUrl: {
       type: Sequelize.STRING,
-    },
-    imageName: {
-      type: Sequelize.STRING,
-    },
-    imageData: {
-      type: Sequelize.BLOB('long'),
     },
     categoryId: {
-      type: Sequelize.STRING,
+      type: Sequelize.INTEGER,
     },
     categoryName: {
-        type: Sequelize.STRING,
+      type: Sequelize.STRING,
     },
     createdBy: {
       type: Sequelize.STRING,
@@ -30,10 +24,10 @@ module.exports = (sequelize, Sequelize) => {
   });
 
   Product.associate = function (models) {
-    Product.belongsTo(models.categories, {
-      through: 'product_categories',
-      foreignKey: 'productId',
-      other: 'categoryId',
+    Product.belongsToMany(models.categories, {
+      through: "product_categories",
+      foreignKey: "productId",
+      other: "categoryId",
     });
   };
 

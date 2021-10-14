@@ -9,5 +9,5 @@ module.exports = {
   authJwt,
   categoryCheck,
   productCheck,
-  multerHelper
+  multerHelper,
 };
