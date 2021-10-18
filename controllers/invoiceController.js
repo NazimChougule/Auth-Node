@@ -63,7 +63,6 @@ function generateCustomerInformation(doc, invoiceData, userName) {
 
   const customerInformationTop = 200;
   let invoice = JSON.parse(JSON.stringify(invoiceData));
-  console.log(invoice, invoice.invoice_number);
   doc
     .fontSize(10)
     .text('Invoice Number:', 50, customerInformationTop)
