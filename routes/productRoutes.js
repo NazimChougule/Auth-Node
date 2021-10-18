@@ -7,7 +7,7 @@ const router = express.Router();
 router
   .route("/")
   .get(
-    [authJwt.verifyToken, authJwt.isModerator],
+    [authJwt.verifyToken, authJwt.isModeratorOrUser],
     productController.getAllProducts
   )
   .post(
@@ -24,7 +24,7 @@ router
 
 router
   .route("/:id")
-  .get([authJwt.verifyToken, authJwt.isModerator], productController.getProduct)
+  .get([authJwt.verifyToken, authJwt.isModeratorOrUser], productController.getProduct)
   .patch(
     [
       authJwt.verifyToken,
