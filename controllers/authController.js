@@ -1,9 +1,12 @@
 const models = require('../models');
+const redis = require('redis');
 const config = require('../config/authConfig');
 const User = models.users;
 
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
+
+const redisClient = redis.createClient(6379);
 
 exports.signup = async (req, res) => {
   try {
@@ -56,15 +59,17 @@ exports.signin = async (req, res) => {
       for (let i = 0; i < roles.length; i++) {
         authorities.push('ROLE_' + roles[i].name.toUpperCase());
       }
+      const userData = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        roles: authorities,
+        accessToken: token,
+      };
+      redisClient.setex('userData', 6000, JSON.stringify(userData));
       res.status(200).send({
         message: 'success',
-        data: {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          roles: authorities,
-          accessToken: token,
-        },
+        data: userData,
       });
     });
   } catch (err) {
