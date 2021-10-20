@@ -1,6 +1,8 @@
 const models = require('../models');
+const Sequelize = require('sequelize');
 const Cart = models.carts;
 const Order = models.orders;
+const Op = Sequelize.Op;
 
 exports.getUserCart = async (req, res) => {
   try {
@@ -181,26 +183,28 @@ exports.placeOrder = async (req, res) => {
       pincode: req.body.pincode,
       invoice_number: invoiceNumber,
     });
-
     let productIDS = [],
       set = new Set();
-    for (let i = 0; i < orders.length; i++) {
-      for (let j = 0; j < orders[i].products.length; j++)
-        set.add(orders[i].products[j].id);
-    }
+    for (let j = 0; j < orders.products.length; j++)
+      set.add(orders.products[j].id);
     productIDS = [...set];
     let products = await models.products.findAll({
       raw: true,
       where: { id: productIDS },
     });
 
-    for (let i = 0; i < orders.length; i++) {
-      for (let j = 0; j < orders[i].products.length; j++) {
-        let pID = orders[i].products[j].id;
-        let index = productIDS.indexOf(pID);
-        let obj = { ...orders[i].products[j] };
-        orders[i].products[j] = { ...obj, ...products[index] };
-      }
+    await models.carts.destroy({
+      where: {
+        productId: productIDS,
+        userId: req.userId,
+      },
+    });
+
+    for (let j = 0; j < orders.products.length; j++) {
+      let pID = orders.products[j].id;
+      let index = productIDS.indexOf(pID);
+      let obj = { ...orders.products[j] };
+      orders.products[j] = { ...obj, ...products[index] };
     }
 
     return res.status(201).json({
